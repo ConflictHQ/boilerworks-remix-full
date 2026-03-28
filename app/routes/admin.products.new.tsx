@@ -1,0 +1,150 @@
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, useActionData, useLoaderData, useNavigation, Link } from "@remix-run/react";
+import { z } from "zod";
+import { db } from "~/db/connection.server";
+import { products, categories } from "~/db/schema";
+import { isNull } from "drizzle-orm";
+import { requirePermission } from "~/services/session.server";
+import { logAudit } from "~/services/audit.server";
+
+const productSchema = z.object({
+  name: z.string().min(1, "Name is required").max(255),
+  slug: z
+    .string()
+    .min(1, "Slug is required")
+    .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+  description: z.string().optional().default(""),
+  price: z.coerce.number().int().min(0, "Price must be non-negative"),
+  categoryId: z.string().uuid().optional().or(z.literal("")),
+  isPublished: z.coerce.boolean().optional().default(false),
+});
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requirePermission(request, "products.create");
+
+  const cats = await db
+    .select({ id: categories.id, name: categories.name })
+    .from(categories)
+    .where(isNull(categories.deletedAt));
+
+  return json({ categories: cats });
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const user = await requirePermission(request, "products.create");
+  const formData = await request.formData();
+
+  const raw = {
+    name: formData.get("name"),
+    slug: formData.get("slug"),
+    description: formData.get("description"),
+    price: formData.get("price"),
+    categoryId: formData.get("categoryId"),
+    isPublished: formData.get("isPublished") === "on",
+  };
+
+  const parsed = productSchema.safeParse(raw);
+  if (!parsed.success) {
+    return json({ ok: false as const, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
+  }
+
+  const data = parsed.data;
+
+  const [product] = await db
+    .insert(products)
+    .values({
+      name: data.name,
+      slug: data.slug,
+      description: data.description,
+      price: data.price,
+      categoryId: data.categoryId || null,
+      isPublished: data.isPublished,
+      createdBy: user.id,
+      updatedBy: user.id,
+    })
+    .returning();
+
+  await logAudit({
+    userId: user.id,
+    action: "create",
+    entityType: "product",
+    entityId: product.id,
+    details: { name: product.name },
+  });
+
+  return redirect("/admin/products");
+}
+
+export default function NewProduct() {
+  const { categories } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  return (
+    <div>
+      <div className="mb-6">
+        <Link to="/admin/products" className="text-sm text-surface-400 hover:text-surface-200">
+          &larr; Back to products
+        </Link>
+        <h1 className="mt-2 text-2xl font-bold text-surface-100">New Product</h1>
+      </div>
+
+      <div className="card max-w-2xl">
+        <Form method="post" className="space-y-4">
+          <div>
+            <label htmlFor="name" className="label">Name</label>
+            <input id="name" name="name" type="text" required className="input" />
+            {actionData?.errors?.name && (
+              <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="slug" className="label">Slug</label>
+            <input id="slug" name="slug" type="text" required className="input" />
+            {actionData?.errors?.slug && (
+              <p className="mt-1 text-sm text-red-400">{actionData.errors.slug[0]}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="description" className="label">Description</label>
+            <textarea id="description" name="description" rows={3} className="input" />
+          </div>
+
+          <div>
+            <label htmlFor="price" className="label">Price (cents)</label>
+            <input id="price" name="price" type="number" min="0" defaultValue="0" className="input" />
+            {actionData?.errors?.price && (
+              <p className="mt-1 text-sm text-red-400">{actionData.errors.price[0]}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="categoryId" className="label">Category</label>
+            <select id="categoryId" name="categoryId" className="input">
+              <option value="">None</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input id="isPublished" name="isPublished" type="checkbox" className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600" />
+            <label htmlFor="isPublished" className="text-sm text-surface-300">Published</label>
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button type="submit" disabled={isSubmitting} className="btn-primary">
+              {isSubmitting ? "Creating..." : "Create Product"}
+            </button>
+            <Link to="/admin/products" className="btn-secondary">Cancel</Link>
+          </div>
+        </Form>
+      </div>
+    </div>
+  );
+}

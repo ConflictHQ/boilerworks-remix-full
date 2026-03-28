@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: boilerworks
+      POSTGRES_PASSWORD: boilerworks
+      POSTGRES_DB: boilerworks
+    ports:
+      - "5451:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boilerworks -d boilerworks"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "3006:3006"
+    environment:
+      DATABASE_URL: postgresql://boilerworks:boilerworks@db:5432/boilerworks
+      SESSION_SECRET: docker-dev-secret-change-in-production-32ch
+      NODE_ENV: development
+      PORT: "3006"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
