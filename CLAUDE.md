@@ -18,7 +18,7 @@ Read it before writing any code.
 ## Quick Reference
 
 ```bash
-npm run dev          # Start dev server on :3006
+npm run dev          # Start dev server on :3000
 npm test             # Run tests
 npm run lint         # ESLint + Prettier check
 npm run db:push      # Push schema to database
