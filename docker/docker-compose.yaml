@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: boilerworks
       POSTGRES_DB: boilerworks
     ports:
-      - "5451:5432"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -20,7 +20,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     ports:
-      - "3006:3006"
+      - "3000:3006"
     environment:
       DATABASE_URL: postgresql://boilerworks:boilerworks@db:5432/boilerworks
       SESSION_SECRET: docker-dev-secret-change-in-production-32ch

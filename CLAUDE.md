@@ -8,7 +8,7 @@ Read it before writing any code.
 
 - **Framework**: Remix 2 (React 18, Vite)
 - **ORM**: Drizzle ORM
-- **Database**: PostgreSQL (port 5451)
+- **Database**: PostgreSQL (port 5432)
 - **Auth**: Session-based (cookie sessions, SHA256 token hashing)
 - **Permissions**: Group-based (users -> groups -> permissions)
 - **Styling**: Tailwind CSS (dark admin theme)
@@ -43,4 +43,4 @@ npm run db:seed      # Seed sample data
 cd docker && docker compose up -d
 ```
 
-Ports: Remix 3006, PostgreSQL 5451.
+Ports: Remix 3000, PostgreSQL 5432.
