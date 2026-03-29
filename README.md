@@ -29,7 +29,7 @@ Open [http://localhost:3000](http://localhost:3000). Login with `admin@boilerwor
 - **Drizzle ORM** with PostgreSQL
 - **Session auth** with cookie sessions and SHA256 token hashing
 - **Group-based permissions** (users, groups, permissions)
-- **Products + Categories CRUD** with loaders/actions
+- **Items + Categories CRUD** with loaders/actions
 - **Forms engine** with dynamic JSON schema definitions
 - **Workflow engine** with state machine transitions
 - **Dark admin theme** (Tailwind CSS, Boilerworks branding)

@@ -3,12 +3,12 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useNavigation, Link } from "@remix-run/react";
 import { z } from "zod";
 import { db } from "~/db/connection.server";
-import { products, categories } from "~/db/schema";
+import { items, categories } from "~/db/schema";
 import { eq, isNull, and } from "drizzle-orm";
 import { requirePermission } from "~/services/session.server";
 import { logAudit } from "~/services/audit.server";
 
-const productSchema = z.object({
+const itemSchema = z.object({
   name: z.string().min(1, "Name is required").max(255),
   slug: z
     .string()
@@ -21,22 +21,22 @@ const productSchema = z.object({
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  await requirePermission(request, "products.read");
+  await requirePermission(request, "items.read");
 
-  const [product] = await db
+  const [item] = await db
     .select()
-    .from(products)
-    .where(and(eq(products.id, params.id!), isNull(products.deletedAt)))
+    .from(items)
+    .where(and(eq(items.id, params.id!), isNull(items.deletedAt)))
     .limit(1);
 
-  if (!product) throw new Response("Not Found", { status: 404 });
+  if (!item) throw new Response("Not Found", { status: 404 });
 
   const cats = await db
     .select({ id: categories.id, name: categories.name })
     .from(categories)
     .where(isNull(categories.deletedAt));
 
-  return json({ product, categories: cats });
+  return json({ item, categories: cats });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -44,24 +44,24 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const intent = formData.get("intent");
 
   if (intent === "delete") {
-    const user = await requirePermission(request, "products.delete");
+    const user = await requirePermission(request, "items.delete");
 
     await db
-      .update(products)
+      .update(items)
       .set({ deletedAt: new Date(), deletedBy: user.id })
-      .where(eq(products.id, params.id!));
+      .where(eq(items.id, params.id!));
 
     await logAudit({
       userId: user.id,
       action: "delete",
-      entityType: "product",
+      entityType: "item",
       entityId: params.id,
     });
 
-    return redirect("/admin/products");
+    return redirect("/admin/items");
   }
 
-  const user = await requirePermission(request, "products.update");
+  const user = await requirePermission(request, "items.update");
 
   const raw = {
     name: formData.get("name"),
@@ -72,7 +72,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     isPublished: formData.get("isPublished") === "on",
   };
 
-  const parsed = productSchema.safeParse(raw);
+  const parsed = itemSchema.safeParse(raw);
   if (!parsed.success) {
     return json({ ok: false as const, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
   }
@@ -80,7 +80,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const data = parsed.data;
 
   await db
-    .update(products)
+    .update(items)
     .set({
       name: data.name,
       slug: data.slug,
@@ -91,21 +91,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
       updatedAt: new Date(),
       updatedBy: user.id,
     })
-    .where(eq(products.id, params.id!));
+    .where(eq(items.id, params.id!));
 
   await logAudit({
     userId: user.id,
     action: "update",
-    entityType: "product",
+    entityType: "item",
     entityId: params.id,
     details: { name: data.name },
   });
 
-  return redirect("/admin/products");
+  return redirect("/admin/items");
 }
 
-export default function EditProduct() {
-  const { product, categories } = useLoaderData<typeof loader>();
+export default function EditItem() {
+  const { item, categories } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -113,17 +113,17 @@ export default function EditProduct() {
   return (
     <div>
       <div className="mb-6">
-        <Link to="/admin/products" className="text-sm text-surface-400 hover:text-surface-200">
-          &larr; Back to products
+        <Link to="/admin/items" className="text-sm text-surface-400 hover:text-surface-200">
+          &larr; Back to items
         </Link>
-        <h1 className="mt-2 text-2xl font-bold text-surface-100">Edit Product</h1>
+        <h1 className="mt-2 text-2xl font-bold text-surface-100">Edit Item</h1>
       </div>
 
       <div className="card max-w-2xl">
         <Form method="post" className="space-y-4">
           <div>
             <label htmlFor="name" className="label">Name</label>
-            <input id="name" name="name" type="text" required className="input" defaultValue={product.name} />
+            <input id="name" name="name" type="text" required className="input" defaultValue={item.name} />
             {actionData?.errors?.name && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
             )}
@@ -131,7 +131,7 @@ export default function EditProduct() {
 
           <div>
             <label htmlFor="slug" className="label">Slug</label>
-            <input id="slug" name="slug" type="text" required className="input" defaultValue={product.slug} />
+            <input id="slug" name="slug" type="text" required className="input" defaultValue={item.slug} />
             {actionData?.errors?.slug && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.slug[0]}</p>
             )}
@@ -139,12 +139,12 @@ export default function EditProduct() {
 
           <div>
             <label htmlFor="description" className="label">Description</label>
-            <textarea id="description" name="description" rows={3} className="input" defaultValue={product.description || ""} />
+            <textarea id="description" name="description" rows={3} className="input" defaultValue={item.description || ""} />
           </div>
 
           <div>
             <label htmlFor="price" className="label">Price (cents)</label>
-            <input id="price" name="price" type="number" min="0" className="input" defaultValue={product.price} />
+            <input id="price" name="price" type="number" min="0" className="input" defaultValue={item.price} />
             {actionData?.errors?.price && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.price[0]}</p>
             )}
@@ -152,7 +152,7 @@ export default function EditProduct() {
 
           <div>
             <label htmlFor="categoryId" className="label">Category</label>
-            <select id="categoryId" name="categoryId" className="input" defaultValue={product.categoryId || ""}>
+            <select id="categoryId" name="categoryId" className="input" defaultValue={item.categoryId || ""}>
               <option value="">None</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -161,7 +161,7 @@ export default function EditProduct() {
           </div>
 
           <div className="flex items-center gap-2">
-            <input id="isPublished" name="isPublished" type="checkbox" className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600" defaultChecked={product.isPublished} />
+            <input id="isPublished" name="isPublished" type="checkbox" className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600" defaultChecked={item.isPublished} />
             <label htmlFor="isPublished" className="text-sm text-surface-300">Published</label>
           </div>
 
@@ -170,7 +170,7 @@ export default function EditProduct() {
               <button type="submit" disabled={isSubmitting} className="btn-primary">
                 {isSubmitting ? "Saving..." : "Save Changes"}
               </button>
-              <Link to="/admin/products" className="btn-secondary">Cancel</Link>
+              <Link to="/admin/items" className="btn-secondary">Cancel</Link>
             </div>
           </div>
         </Form>
@@ -178,8 +178,8 @@ export default function EditProduct() {
         <div className="mt-6 border-t border-surface-700 pt-6">
           <Form method="post">
             <input type="hidden" name="intent" value="delete" />
-            <button type="submit" className="btn-danger" onClick={(e) => { if (!confirm("Delete this product?")) e.preventDefault(); }}>
-              Delete Product
+            <button type="submit" className="btn-danger" onClick={(e) => { if (!confirm("Delete this item?")) e.preventDefault(); }}>
+              Delete Item
             </button>
           </Form>
         </div>

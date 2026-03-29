@@ -8,10 +8,10 @@ export async function seed() {
 
   // ── Permissions ────────────────────────────────────────────────
   const permissionDefs = [
-    { codename: "products.create", name: "Create products" },
-    { codename: "products.read", name: "Read products" },
-    { codename: "products.update", name: "Update products" },
-    { codename: "products.delete", name: "Delete products" },
+    { codename: "items.create", name: "Create items" },
+    { codename: "items.read", name: "Read items" },
+    { codename: "items.update", name: "Update items" },
+    { codename: "items.delete", name: "Delete items" },
     { codename: "categories.create", name: "Create categories" },
     { codename: "categories.read", name: "Read categories" },
     { codename: "categories.update", name: "Update categories" },
@@ -72,7 +72,7 @@ export async function seed() {
   if (editorGroup && insertedPerms.length > 0) {
     const editorPerms = insertedPerms.filter(
       (p) =>
-        p.codename.startsWith("products.") ||
+        p.codename.startsWith("items.") ||
         p.codename.startsWith("categories.") ||
         p.codename.startsWith("forms.") ||
         p.codename === "admin.access",
@@ -166,10 +166,10 @@ export async function seed() {
     .onConflictDoNothing()
     .returning();
 
-  // ── Sample products ────────────────────────────────────────────
+  // ── Sample items ────────────────────────────────────────────
   if (cat1) {
     await db
-      .insert(schema.products)
+      .insert(schema.items)
       .values({
         id: uuidv4(),
         name: "Wireless Keyboard",
@@ -185,7 +185,7 @@ export async function seed() {
 
   if (cat2) {
     await db
-      .insert(schema.products)
+      .insert(schema.items)
       .values({
         id: uuidv4(),
         name: "TypeScript Handbook",
@@ -224,9 +224,9 @@ export async function seed() {
     .insert(schema.workflowDefinitions)
     .values({
       id: uuidv4(),
-      name: "Product Approval",
-      slug: "product-approval",
-      description: "Workflow for approving new products",
+      name: "Item Approval",
+      slug: "item-approval",
+      description: "Workflow for approving new items",
       states: [
         { name: "draft", label: "Draft" },
         { name: "pending_review", label: "Pending Review" },

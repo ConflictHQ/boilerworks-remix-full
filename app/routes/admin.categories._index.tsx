@@ -26,7 +26,7 @@ export default function CategoriesList() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-surface-100">Categories</h1>
-          <p className="mt-1 text-sm text-surface-400">Organize products into categories.</p>
+          <p className="mt-1 text-sm text-surface-400">Organize items into categories.</p>
         </div>
         <Link to="/admin/categories/new" className="btn-primary">
           New Category

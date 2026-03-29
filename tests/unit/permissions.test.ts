@@ -35,7 +35,7 @@ const editor: AuthUser = {
   displayName: "Editor",
   isActive: true,
   isSuperuser: false,
-  permissions: ["products.create", "products.read", "products.update", "admin.access"],
+  permissions: ["items.create", "items.read", "items.update", "admin.access"],
 };
 
 const viewer: AuthUser = {
@@ -44,28 +44,28 @@ const viewer: AuthUser = {
   displayName: "Viewer",
   isActive: true,
   isSuperuser: false,
-  permissions: ["products.read", "categories.read"],
+  permissions: ["items.read", "categories.read"],
 };
 
 describe("permission checks", () => {
   it("superuser has all permissions implicitly", () => {
-    expect(hasPermission(superuser, "products.create")).toBe(true);
+    expect(hasPermission(superuser, "items.create")).toBe(true);
     expect(hasPermission(superuser, "anything.at.all")).toBe(true);
     expect(hasPermission(superuser, "nonexistent")).toBe(true);
   });
 
   it("editor has only assigned permissions", () => {
-    expect(hasPermission(editor, "products.create")).toBe(true);
-    expect(hasPermission(editor, "products.read")).toBe(true);
-    expect(hasPermission(editor, "products.delete")).toBe(false);
+    expect(hasPermission(editor, "items.create")).toBe(true);
+    expect(hasPermission(editor, "items.read")).toBe(true);
+    expect(hasPermission(editor, "items.delete")).toBe(false);
     expect(hasPermission(editor, "categories.create")).toBe(false);
   });
 
   it("viewer has only read permissions", () => {
-    expect(hasPermission(viewer, "products.read")).toBe(true);
+    expect(hasPermission(viewer, "items.read")).toBe(true);
     expect(hasPermission(viewer, "categories.read")).toBe(true);
-    expect(hasPermission(viewer, "products.create")).toBe(false);
-    expect(hasPermission(viewer, "products.update")).toBe(false);
+    expect(hasPermission(viewer, "items.create")).toBe(false);
+    expect(hasPermission(viewer, "items.update")).toBe(false);
   });
 
   it("admin access check works", () => {

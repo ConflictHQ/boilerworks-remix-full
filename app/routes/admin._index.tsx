@@ -2,17 +2,17 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { db } from "~/db/connection.server";
-import { products, categories, users, formSubmissions, workflowInstances } from "~/db/schema";
+import { items, categories, users, formSubmissions, workflowInstances } from "~/db/schema";
 import { isNull, count } from "drizzle-orm";
 import { requireAdmin } from "~/services/session.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireAdmin(request);
 
-  const [productCount] = await db
+  const [itemCount] = await db
     .select({ count: count() })
-    .from(products)
-    .where(isNull(products.deletedAt));
+    .from(items)
+    .where(isNull(items.deletedAt));
   const [categoryCount] = await db
     .select({ count: count() })
     .from(categories)
@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return json({
     stats: {
-      products: productCount.count,
+      items: itemCount.count,
       categories: categoryCount.count,
       users: userCount.count,
       submissions: submissionCount.count,
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
       <p className="mt-1 text-sm text-surface-400">Overview of your application.</p>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <StatCard label="Products" value={stats.products} />
+        <StatCard label="Items" value={stats.items} />
         <StatCard label="Categories" value={stats.categories} />
         <StatCard label="Users" value={stats.users} />
         <StatCard label="Form Submissions" value={stats.submissions} />

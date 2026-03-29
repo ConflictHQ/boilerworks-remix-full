@@ -26,8 +26,8 @@ describe("database schema", () => {
     expect(schema.groupPermissions).toBeDefined();
   });
 
-  it("exports products table", () => {
-    expect(schema.products).toBeDefined();
+  it("exports items table", () => {
+    expect(schema.items).toBeDefined();
   });
 
   it("exports categories table", () => {
@@ -67,7 +67,7 @@ describe("database schema", () => {
     expect(schema.groupsRelations).toBeDefined();
     expect(schema.permissionsRelations).toBeDefined();
     expect(schema.categoriesRelations).toBeDefined();
-    expect(schema.productsRelations).toBeDefined();
+    expect(schema.itemsRelations).toBeDefined();
     expect(schema.formSubmissionsRelations).toBeDefined();
     expect(schema.workflowInstancesRelations).toBeDefined();
     expect(schema.workflowTransitionsRelations).toBeDefined();

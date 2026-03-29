@@ -3,12 +3,12 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useNavigation, Link } from "@remix-run/react";
 import { z } from "zod";
 import { db } from "~/db/connection.server";
-import { products, categories } from "~/db/schema";
+import { items, categories } from "~/db/schema";
 import { isNull } from "drizzle-orm";
 import { requirePermission } from "~/services/session.server";
 import { logAudit } from "~/services/audit.server";
 
-const productSchema = z.object({
+const itemSchema = z.object({
   name: z.string().min(1, "Name is required").max(255),
   slug: z
     .string()
@@ -21,7 +21,7 @@ const productSchema = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  await requirePermission(request, "products.create");
+  await requirePermission(request, "items.create");
 
   const cats = await db
     .select({ id: categories.id, name: categories.name })
@@ -32,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const user = await requirePermission(request, "products.create");
+  const user = await requirePermission(request, "items.create");
   const formData = await request.formData();
 
   const raw = {
@@ -44,15 +44,15 @@ export async function action({ request }: ActionFunctionArgs) {
     isPublished: formData.get("isPublished") === "on",
   };
 
-  const parsed = productSchema.safeParse(raw);
+  const parsed = itemSchema.safeParse(raw);
   if (!parsed.success) {
     return json({ ok: false as const, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
   }
 
   const data = parsed.data;
 
-  const [product] = await db
-    .insert(products)
+  const [item] = await db
+    .insert(items)
     .values({
       name: data.name,
       slug: data.slug,
@@ -68,15 +68,15 @@ export async function action({ request }: ActionFunctionArgs) {
   await logAudit({
     userId: user.id,
     action: "create",
-    entityType: "product",
-    entityId: product.id,
-    details: { name: product.name },
+    entityType: "item",
+    entityId: item.id,
+    details: { name: item.name },
   });
 
-  return redirect("/admin/products");
+  return redirect("/admin/items");
 }
 
-export default function NewProduct() {
+export default function NewItem() {
   const { categories } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
@@ -85,10 +85,10 @@ export default function NewProduct() {
   return (
     <div>
       <div className="mb-6">
-        <Link to="/admin/products" className="text-sm text-surface-400 hover:text-surface-200">
-          &larr; Back to products
+        <Link to="/admin/items" className="text-sm text-surface-400 hover:text-surface-200">
+          &larr; Back to items
         </Link>
-        <h1 className="mt-2 text-2xl font-bold text-surface-100">New Product</h1>
+        <h1 className="mt-2 text-2xl font-bold text-surface-100">New Item</h1>
       </div>
 
       <div className="card max-w-2xl">
@@ -139,9 +139,9 @@ export default function NewProduct() {
 
           <div className="flex gap-3 pt-2">
             <button type="submit" disabled={isSubmitting} className="btn-primary">
-              {isSubmitting ? "Creating..." : "Create Product"}
+              {isSubmitting ? "Creating..." : "Create Item"}
             </button>
-            <Link to="/admin/products" className="btn-secondary">Cancel</Link>
+            <Link to="/admin/items" className="btn-secondary">Cancel</Link>
           </div>
         </Form>
       </div>

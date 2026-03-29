@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
 
-const productSchema = z.object({
+const itemSchema = z.object({
   name: z.string().min(1, "Name is required").max(255),
   slug: z
     .string()
@@ -22,11 +22,11 @@ const categorySchema = z.object({
   description: z.string().optional().default(""),
 });
 
-describe("product validation", () => {
-  it("accepts valid product data", () => {
-    const result = productSchema.safeParse({
-      name: "Test Product",
-      slug: "test-product",
+describe("item validation", () => {
+  it("accepts valid item data", () => {
+    const result = itemSchema.safeParse({
+      name: "Test Item",
+      slug: "test-item",
       price: 1999,
       isPublished: true,
     });
@@ -34,7 +34,7 @@ describe("product validation", () => {
   });
 
   it("rejects empty name", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "",
       slug: "test",
       price: 100,
@@ -43,25 +43,25 @@ describe("product validation", () => {
   });
 
   it("rejects invalid slug with uppercase", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "Test",
-      slug: "Test-Product",
+      slug: "Test-Item",
       price: 100,
     });
     expect(result.success).toBe(false);
   });
 
   it("rejects invalid slug with spaces", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "Test",
-      slug: "test product",
+      slug: "test item",
       price: 100,
     });
     expect(result.success).toBe(false);
   });
 
   it("rejects negative price", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "Test",
       slug: "test",
       price: -1,
@@ -70,7 +70,7 @@ describe("product validation", () => {
   });
 
   it("coerces string price to number", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "Test",
       slug: "test",
       price: "2500",
@@ -82,7 +82,7 @@ describe("product validation", () => {
   });
 
   it("accepts empty categoryId", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "Test",
       slug: "test",
       price: 100,
@@ -92,7 +92,7 @@ describe("product validation", () => {
   });
 
   it("accepts valid uuid categoryId", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "Test",
       slug: "test",
       price: 100,
@@ -102,7 +102,7 @@ describe("product validation", () => {
   });
 
   it("rejects invalid uuid categoryId", () => {
-    const result = productSchema.safeParse({
+    const result = itemSchema.safeParse({
       name: "Test",
       slug: "test",
       price: 100,
