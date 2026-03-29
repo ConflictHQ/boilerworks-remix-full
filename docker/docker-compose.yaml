@@ -24,7 +24,7 @@ services:
     environment:
       DATABASE_URL: postgresql://boilerworks:boilerworks@db:5432/boilerworks
       SESSION_SECRET: docker-dev-secret-change-in-production-32ch
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: "3006"
     depends_on:
       db:
