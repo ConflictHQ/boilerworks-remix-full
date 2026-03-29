@@ -57,3 +57,7 @@ Open [http://localhost:3006](http://localhost:3006). Login with `admin@boilerwor
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [bootstrap.md](bootstrap.md).
+
+---
+
+Boilerworks is a [Conflict](https://weareconflict.com) brand. CONFLICT is a registered trademark of Conflict LLC.

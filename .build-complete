@@ -1,4 +1,0 @@
-boilerworks-remix-full
-built: 2026-03-28
-stack: remix-2, react-18, drizzle-orm, postgresql, tailwindcss, vitest
-features: session-auth, group-permissions, products-crud, categories-crud, forms-engine, workflow-engine, audit-log, dark-admin-theme, docker-compose, ci-pipeline
