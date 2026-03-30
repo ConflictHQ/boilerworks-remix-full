@@ -35,7 +35,9 @@ export default function WorkflowsList() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-surface-100">Workflows</h1>
-          <p className="mt-1 text-sm text-surface-400">Define and manage state machine workflows.</p>
+          <p className="mt-1 text-sm text-surface-400">
+            Define and manage state machine workflows.
+          </p>
         </div>
         <Link to="/admin/workflows/new" className="btn-primary">
           New Workflow
@@ -47,8 +49,12 @@ export default function WorkflowsList() {
           <thead>
             <tr className="border-b border-surface-700 bg-surface-800/50">
               <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">Name</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">Initial State</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">Instances</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">
+                Initial State
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">
+                Instances
+              </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">Status</th>
               <th className="px-4 py-3 text-right text-sm font-medium text-surface-300">Actions</th>
             </tr>

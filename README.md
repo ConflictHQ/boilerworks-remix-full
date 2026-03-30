@@ -41,18 +41,18 @@ Open [http://localhost:3000](http://localhost:3000). Login with `admin@boilerwor
 
 ## Scripts
 
-| Command | Description |
-|---------|------------|
-| `npm run dev` | Start dev server (port 3006) |
-| `npm run build` | Production build |
-| `npm start` | Start production server |
-| `npm test` | Run tests |
-| `npm run lint` | ESLint + Prettier check |
-| `npm run typecheck` | TypeScript check |
-| `npm run db:push` | Push schema to database |
-| `npm run db:generate` | Generate migration files |
-| `npm run db:migrate` | Run migrations |
-| `npm run db:seed` | Seed sample data |
+| Command               | Description                  |
+| --------------------- | ---------------------------- |
+| `npm run dev`         | Start dev server (port 3006) |
+| `npm run build`       | Production build             |
+| `npm start`           | Start production server      |
+| `npm test`            | Run tests                    |
+| `npm run lint`        | ESLint + Prettier check      |
+| `npm run typecheck`   | TypeScript check             |
+| `npm run db:push`     | Push schema to database      |
+| `npm run db:generate` | Generate migration files     |
+| `npm run db:migrate`  | Run migrations               |
+| `npm run db:seed`     | Seed sample data             |
 
 ## Contributing
 

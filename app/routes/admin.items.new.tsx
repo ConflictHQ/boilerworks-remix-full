@@ -46,7 +46,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const parsed = itemSchema.safeParse(raw);
   if (!parsed.success) {
-    return json({ ok: false as const, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
+    return json(
+      { ok: false as const, errors: parsed.error.flatten().fieldErrors },
+      { status: 400 },
+    );
   }
 
   const data = parsed.data;
@@ -94,7 +97,9 @@ export default function NewItem() {
       <div className="card max-w-2xl">
         <Form method="post" className="space-y-4">
           <div>
-            <label htmlFor="name" className="label">Name</label>
+            <label htmlFor="name" className="label">
+              Name
+            </label>
             <input id="name" name="name" type="text" required className="input" />
             {actionData?.errors?.name && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
@@ -102,7 +107,9 @@ export default function NewItem() {
           </div>
 
           <div>
-            <label htmlFor="slug" className="label">Slug</label>
+            <label htmlFor="slug" className="label">
+              Slug
+            </label>
             <input id="slug" name="slug" type="text" required className="input" />
             {actionData?.errors?.slug && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.slug[0]}</p>
@@ -110,38 +117,62 @@ export default function NewItem() {
           </div>
 
           <div>
-            <label htmlFor="description" className="label">Description</label>
+            <label htmlFor="description" className="label">
+              Description
+            </label>
             <textarea id="description" name="description" rows={3} className="input" />
           </div>
 
           <div>
-            <label htmlFor="price" className="label">Price (cents)</label>
-            <input id="price" name="price" type="number" min="0" defaultValue="0" className="input" />
+            <label htmlFor="price" className="label">
+              Price (cents)
+            </label>
+            <input
+              id="price"
+              name="price"
+              type="number"
+              min="0"
+              defaultValue="0"
+              className="input"
+            />
             {actionData?.errors?.price && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.price[0]}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="categoryId" className="label">Category</label>
+            <label htmlFor="categoryId" className="label">
+              Category
+            </label>
             <select id="categoryId" name="categoryId" className="input">
               <option value="">None</option>
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
               ))}
             </select>
           </div>
 
           <div className="flex items-center gap-2">
-            <input id="isPublished" name="isPublished" type="checkbox" className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600" />
-            <label htmlFor="isPublished" className="text-sm text-surface-300">Published</label>
+            <input
+              id="isPublished"
+              name="isPublished"
+              type="checkbox"
+              className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600"
+            />
+            <label htmlFor="isPublished" className="text-sm text-surface-300">
+              Published
+            </label>
           </div>
 
           <div className="flex gap-3 pt-2">
             <button type="submit" disabled={isSubmitting} className="btn-primary">
               {isSubmitting ? "Creating..." : "Create Item"}
             </button>
-            <Link to="/admin/items" className="btn-secondary">Cancel</Link>
+            <Link to="/admin/items" className="btn-secondary">
+              Cancel
+            </Link>
           </div>
         </Form>
       </div>

@@ -78,9 +78,7 @@ export default function WorkflowInstances() {
         <Link to="/admin/workflows" className="text-sm text-surface-400 hover:text-surface-200">
           &larr; Back to workflows
         </Link>
-        <h1 className="mt-2 text-2xl font-bold text-surface-100">
-          Instances: {workflow.name}
-        </h1>
+        <h1 className="mt-2 text-2xl font-bold text-surface-100">Instances: {workflow.name}</h1>
         <p className="mt-1 text-sm text-surface-400">{instances.length} instance(s)</p>
       </div>
 
@@ -126,9 +124,7 @@ export default function WorkflowInstances() {
                       <span>{h.fromState}</span>
                       <span className="text-surface-600">&rarr;</span>
                       <span>{h.toState}</span>
-                      {h.comment && (
-                        <span className="text-surface-500">({h.comment})</span>
-                      )}
+                      {h.comment && <span className="text-surface-500">({h.comment})</span>}
                       <span className="ml-auto text-surface-600">
                         {new Date(h.createdAt).toLocaleString()}
                       </span>

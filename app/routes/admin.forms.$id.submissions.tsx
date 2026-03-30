@@ -35,9 +35,7 @@ export default function FormSubmissionsList() {
         <Link to="/admin/forms" className="text-sm text-surface-400 hover:text-surface-200">
           &larr; Back to forms
         </Link>
-        <h1 className="mt-2 text-2xl font-bold text-surface-100">
-          Submissions: {formDef.name}
-        </h1>
+        <h1 className="mt-2 text-2xl font-bold text-surface-100">Submissions: {formDef.name}</h1>
         <p className="mt-1 text-sm text-surface-400">{submissions.length} submission(s)</p>
       </div>
 
@@ -66,9 +64,7 @@ export default function FormSubmissionsList() {
           </div>
         ))}
         {submissions.length === 0 && (
-          <div className="card text-center text-sm text-surface-500">
-            No submissions yet.
-          </div>
+          <div className="card text-center text-sm text-surface-500">No submissions yet.</div>
         )}
       </div>
     </div>

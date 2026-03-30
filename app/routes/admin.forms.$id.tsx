@@ -18,7 +18,10 @@ const fieldSchema = z.object({
 
 const formDefSchema = z.object({
   name: z.string().min(1, "Name is required").max(255),
-  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(1, "Slug is required")
+    .regex(/^[a-z0-9-]+$/),
   description: z.string().optional().default(""),
   schema: z.string().min(1, "Schema JSON is required"),
   isActive: z.coerce.boolean().optional().default(true),
@@ -72,7 +75,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const parsed = formDefSchema.safeParse(raw);
   if (!parsed.success) {
-    return json({ ok: false as const, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
+    return json(
+      { ok: false as const, errors: parsed.error.flatten().fieldErrors },
+      { status: 400 },
+    );
   }
 
   let schemaObj;
@@ -131,25 +137,53 @@ export default function EditFormDefinition() {
       <div className="card max-w-2xl">
         <Form method="post" className="space-y-4">
           <div>
-            <label htmlFor="name" className="label">Name</label>
-            <input id="name" name="name" type="text" required className="input" defaultValue={formDef.name} />
+            <label htmlFor="name" className="label">
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              className="input"
+              defaultValue={formDef.name}
+            />
             {actionData?.errors?.name && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="slug" className="label">Slug</label>
-            <input id="slug" name="slug" type="text" required className="input" defaultValue={formDef.slug} />
+            <label htmlFor="slug" className="label">
+              Slug
+            </label>
+            <input
+              id="slug"
+              name="slug"
+              type="text"
+              required
+              className="input"
+              defaultValue={formDef.slug}
+            />
           </div>
 
           <div>
-            <label htmlFor="description" className="label">Description</label>
-            <textarea id="description" name="description" rows={2} className="input" defaultValue={formDef.description || ""} />
+            <label htmlFor="description" className="label">
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows={2}
+              className="input"
+              defaultValue={formDef.description || ""}
+            />
           </div>
 
           <div>
-            <label htmlFor="schema" className="label">Schema (JSON)</label>
+            <label htmlFor="schema" className="label">
+              Schema (JSON)
+            </label>
             <textarea
               id="schema"
               name="schema"
@@ -164,22 +198,38 @@ export default function EditFormDefinition() {
           </div>
 
           <div className="flex items-center gap-2">
-            <input id="isActive" name="isActive" type="checkbox" defaultChecked={formDef.isActive} className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600" />
-            <label htmlFor="isActive" className="text-sm text-surface-300">Active</label>
+            <input
+              id="isActive"
+              name="isActive"
+              type="checkbox"
+              defaultChecked={formDef.isActive}
+              className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600"
+            />
+            <label htmlFor="isActive" className="text-sm text-surface-300">
+              Active
+            </label>
           </div>
 
           <div className="flex gap-3 pt-2">
             <button type="submit" disabled={isSubmitting} className="btn-primary">
               {isSubmitting ? "Saving..." : "Save Changes"}
             </button>
-            <Link to="/admin/forms" className="btn-secondary">Cancel</Link>
+            <Link to="/admin/forms" className="btn-secondary">
+              Cancel
+            </Link>
           </div>
         </Form>
 
         <div className="mt-6 border-t border-surface-700 pt-6">
           <Form method="post">
             <input type="hidden" name="intent" value="delete" />
-            <button type="submit" className="btn-danger" onClick={(e) => { if (!confirm("Delete this form?")) e.preventDefault(); }}>
+            <button
+              type="submit"
+              className="btn-danger"
+              onClick={(e) => {
+                if (!confirm("Delete this form?")) e.preventDefault();
+              }}
+            >
               Delete Form
             </button>
           </Form>

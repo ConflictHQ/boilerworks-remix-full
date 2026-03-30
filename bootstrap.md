@@ -23,18 +23,18 @@ Remix (Node.js / remix-serve)
 
 ## Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Remix 2 + React 18 + Vite |
-| ORM | Drizzle ORM |
-| Database | PostgreSQL |
-| Auth | Cookie session storage, bcrypt passwords |
-| Permissions | Group-based (users -> groups -> permissions) |
-| Validation | Zod schemas in actions |
-| Styling | Tailwind CSS |
-| Testing | Vitest |
-| Docker | docker-compose (PostgreSQL + app) |
-| CI | GitHub Actions (lint, typecheck, test, build, audit) |
+| Layer       | Technology                                           |
+| ----------- | ---------------------------------------------------- |
+| Framework   | Remix 2 + React 18 + Vite                            |
+| ORM         | Drizzle ORM                                          |
+| Database    | PostgreSQL                                           |
+| Auth        | Cookie session storage, bcrypt passwords             |
+| Permissions | Group-based (users -> groups -> permissions)         |
+| Validation  | Zod schemas in actions                               |
+| Styling     | Tailwind CSS                                         |
+| Testing     | Vitest                                               |
+| Docker      | docker-compose (PostgreSQL + app)                    |
+| CI          | GitHub Actions (lint, typecheck, test, build, audit) |
 
 ## Conventions
 

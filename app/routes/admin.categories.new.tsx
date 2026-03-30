@@ -33,7 +33,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const parsed = categorySchema.safeParse(raw);
   if (!parsed.success) {
-    return json({ ok: false as const, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
+    return json(
+      { ok: false as const, errors: parsed.error.flatten().fieldErrors },
+      { status: 400 },
+    );
   }
 
   const data = parsed.data;
@@ -77,7 +80,9 @@ export default function NewCategory() {
       <div className="card max-w-2xl">
         <Form method="post" className="space-y-4">
           <div>
-            <label htmlFor="name" className="label">Name</label>
+            <label htmlFor="name" className="label">
+              Name
+            </label>
             <input id="name" name="name" type="text" required className="input" />
             {actionData?.errors?.name && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
@@ -85,7 +90,9 @@ export default function NewCategory() {
           </div>
 
           <div>
-            <label htmlFor="slug" className="label">Slug</label>
+            <label htmlFor="slug" className="label">
+              Slug
+            </label>
             <input id="slug" name="slug" type="text" required className="input" />
             {actionData?.errors?.slug && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.slug[0]}</p>
@@ -93,7 +100,9 @@ export default function NewCategory() {
           </div>
 
           <div>
-            <label htmlFor="description" className="label">Description</label>
+            <label htmlFor="description" className="label">
+              Description
+            </label>
             <textarea id="description" name="description" rows={3} className="input" />
           </div>
 
@@ -101,7 +110,9 @@ export default function NewCategory() {
             <button type="submit" disabled={isSubmitting} className="btn-primary">
               {isSubmitting ? "Creating..." : "Create Category"}
             </button>
-            <Link to="/admin/categories" className="btn-secondary">Cancel</Link>
+            <Link to="/admin/categories" className="btn-secondary">
+              Cancel
+            </Link>
           </div>
         </Form>
       </div>

@@ -113,8 +113,14 @@ function renderField(field: FormField, errors?: string[]) {
     case "checkbox":
       input = (
         <div className="flex items-center gap-2">
-          <input {...baseProps} type="checkbox" className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600" />
-          <label htmlFor={field.name} className="text-sm text-surface-300">{field.label}</label>
+          <input
+            {...baseProps}
+            type="checkbox"
+            className="h-4 w-4 rounded border-surface-600 bg-surface-800 text-brand-600"
+          />
+          <label htmlFor={field.name} className="text-sm text-surface-300">
+            {field.label}
+          </label>
         </div>
       );
       return (
@@ -128,7 +134,9 @@ function renderField(field: FormField, errors?: string[]) {
         <select {...baseProps}>
           <option value="">Select...</option>
           {field.options?.map((opt) => (
-            <option key={opt} value={opt}>{opt}</option>
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
           ))}
         </select>
       );
@@ -176,9 +184,7 @@ export default function PublicForm() {
 
         <div className="card mt-6">
           <Form method="post" className="space-y-4">
-            {schema.fields.map((field) =>
-              renderField(field, actionData?.errors?.[field.name]),
-            )}
+            {schema.fields.map((field) => renderField(field, actionData?.errors?.[field.name]))}
 
             <button type="submit" disabled={isSubmitting} className="btn-primary w-full">
               {isSubmitting ? "Submitting..." : "Submit"}

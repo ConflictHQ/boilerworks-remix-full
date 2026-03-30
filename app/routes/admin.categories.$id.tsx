@@ -63,7 +63,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const parsed = categorySchema.safeParse(raw);
   if (!parsed.success) {
-    return json({ ok: false as const, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
+    return json(
+      { ok: false as const, errors: parsed.error.flatten().fieldErrors },
+      { status: 400 },
+    );
   }
 
   const data = parsed.data;
@@ -108,24 +111,50 @@ export default function EditCategory() {
       <div className="card max-w-2xl">
         <Form method="post" className="space-y-4">
           <div>
-            <label htmlFor="name" className="label">Name</label>
-            <input id="name" name="name" type="text" required className="input" defaultValue={category.name} />
+            <label htmlFor="name" className="label">
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              className="input"
+              defaultValue={category.name}
+            />
             {actionData?.errors?.name && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="slug" className="label">Slug</label>
-            <input id="slug" name="slug" type="text" required className="input" defaultValue={category.slug} />
+            <label htmlFor="slug" className="label">
+              Slug
+            </label>
+            <input
+              id="slug"
+              name="slug"
+              type="text"
+              required
+              className="input"
+              defaultValue={category.slug}
+            />
             {actionData?.errors?.slug && (
               <p className="mt-1 text-sm text-red-400">{actionData.errors.slug[0]}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="description" className="label">Description</label>
-            <textarea id="description" name="description" rows={3} className="input" defaultValue={category.description || ""} />
+            <label htmlFor="description" className="label">
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows={3}
+              className="input"
+              defaultValue={category.description || ""}
+            />
           </div>
 
           <div className="flex items-center justify-between pt-2">
@@ -133,7 +162,9 @@ export default function EditCategory() {
               <button type="submit" disabled={isSubmitting} className="btn-primary">
                 {isSubmitting ? "Saving..." : "Save Changes"}
               </button>
-              <Link to="/admin/categories" className="btn-secondary">Cancel</Link>
+              <Link to="/admin/categories" className="btn-secondary">
+                Cancel
+              </Link>
             </div>
           </div>
         </Form>
@@ -141,7 +172,13 @@ export default function EditCategory() {
         <div className="mt-6 border-t border-surface-700 pt-6">
           <Form method="post">
             <input type="hidden" name="intent" value="delete" />
-            <button type="submit" className="btn-danger" onClick={(e) => { if (!confirm("Delete this category?")) e.preventDefault(); }}>
+            <button
+              type="submit"
+              className="btn-danger"
+              onClick={(e) => {
+                if (!confirm("Delete this category?")) e.preventDefault();
+              }}
+            >
               Delete Category
             </button>
           </Form>

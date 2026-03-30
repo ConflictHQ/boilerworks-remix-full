@@ -88,9 +88,7 @@ export async function transitionWorkflow(params: {
   );
 
   if (!valid) {
-    throw new Error(
-      `Invalid transition from "${instance.currentState}" to "${params.toState}"`,
-    );
+    throw new Error(`Invalid transition from "${instance.currentState}" to "${params.toState}"`);
   }
 
   const fromState = instance.currentState;

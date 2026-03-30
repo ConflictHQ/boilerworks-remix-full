@@ -39,7 +39,9 @@ export default function CategoriesList() {
             <tr className="border-b border-surface-700 bg-surface-800/50">
               <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">Slug</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">Description</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-surface-300">
+                Description
+              </th>
               <th className="px-4 py-3 text-right text-sm font-medium text-surface-300">Actions</th>
             </tr>
           </thead>
