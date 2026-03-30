@@ -122,6 +122,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function EditFormDefinition() {
   const { formDef } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const errors = actionData?.errors as Record<string, string[] | undefined> | undefined;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -148,9 +149,7 @@ export default function EditFormDefinition() {
               className="input"
               defaultValue={formDef.name}
             />
-            {actionData?.errors?.name && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
-            )}
+            {errors?.name && <p className="mt-1 text-sm text-red-400">{errors!.name[0]}</p>}
           </div>
 
           <div>
@@ -192,9 +191,7 @@ export default function EditFormDefinition() {
               className="input font-mono text-sm"
               defaultValue={JSON.stringify(formDef.schema, null, 2)}
             />
-            {actionData?.errors?.schema && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.schema[0]}</p>
-            )}
+            {errors?.schema && <p className="mt-1 text-sm text-red-400">{errors!.schema[0]}</p>}
           </div>
 
           <div className="flex items-center gap-2">

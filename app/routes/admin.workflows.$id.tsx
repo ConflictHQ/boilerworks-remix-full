@@ -126,6 +126,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function EditWorkflow() {
   const { workflow } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const errors = actionData?.errors as Record<string, string[] | undefined> | undefined;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -162,9 +163,7 @@ export default function EditWorkflow() {
               className="input"
               defaultValue={workflow.name}
             />
-            {actionData?.errors?.name && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
-            )}
+            {errors?.name && <p className="mt-1 text-sm text-red-400">{errors!.name[0]}</p>}
           </div>
 
           <div>
@@ -206,8 +205,8 @@ export default function EditWorkflow() {
               className="input font-mono text-sm"
               defaultValue={definitionJson}
             />
-            {actionData?.errors?.definition && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.definition[0]}</p>
+            {errors?.definition && (
+              <p className="mt-1 text-sm text-red-400">{errors!.definition[0]}</p>
             )}
           </div>
 

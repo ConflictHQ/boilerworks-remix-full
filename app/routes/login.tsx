@@ -60,6 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Login() {
   const actionData = useActionData<typeof action>();
+  const errors = actionData?.errors as Record<string, string[] | undefined> | undefined;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -87,9 +88,7 @@ export default function Login() {
                 className="input"
                 placeholder="admin@boilerworks.dev"
               />
-              {actionData?.errors?.email && (
-                <p className="mt-1 text-sm text-red-400">{actionData.errors.email[0]}</p>
-              )}
+              {errors?.email && <p className="mt-1 text-sm text-red-400">{errors!.email[0]}</p>}
             </div>
 
             <div>
@@ -105,8 +104,8 @@ export default function Login() {
                 className="input"
                 placeholder="Password"
               />
-              {actionData?.errors?.password && (
-                <p className="mt-1 text-sm text-red-400">{actionData.errors.password[0]}</p>
+              {errors?.password && (
+                <p className="mt-1 text-sm text-red-400">{errors!.password[0]}</p>
               )}
             </div>
 

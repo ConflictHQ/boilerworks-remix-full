@@ -118,6 +118,7 @@ const exampleDef = JSON.stringify(
 
 export default function NewWorkflow() {
   const actionData = useActionData<typeof action>();
+  const errors = actionData?.errors as Record<string, string[] | undefined> | undefined;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -137,9 +138,7 @@ export default function NewWorkflow() {
               Name
             </label>
             <input id="name" name="name" type="text" required className="input" />
-            {actionData?.errors?.name && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
-            )}
+            {errors?.name && <p className="mt-1 text-sm text-red-400">{errors!.name[0]}</p>}
           </div>
 
           <div>
@@ -147,9 +146,7 @@ export default function NewWorkflow() {
               Slug
             </label>
             <input id="slug" name="slug" type="text" required className="input" />
-            {actionData?.errors?.slug && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.slug[0]}</p>
-            )}
+            {errors?.slug && <p className="mt-1 text-sm text-red-400">{errors!.slug[0]}</p>}
           </div>
 
           <div>
@@ -171,8 +168,8 @@ export default function NewWorkflow() {
               className="input font-mono text-sm"
               defaultValue={exampleDef}
             />
-            {actionData?.errors?.definition && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.definition[0]}</p>
+            {errors?.definition && (
+              <p className="mt-1 text-sm text-red-400">{errors!.definition[0]}</p>
             )}
           </div>
 

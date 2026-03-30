@@ -103,6 +103,7 @@ const exampleSchema = JSON.stringify(
 
 export default function NewFormDefinition() {
   const actionData = useActionData<typeof action>();
+  const errors = actionData?.errors as Record<string, string[] | undefined> | undefined;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -122,9 +123,7 @@ export default function NewFormDefinition() {
               Name
             </label>
             <input id="name" name="name" type="text" required className="input" />
-            {actionData?.errors?.name && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.name[0]}</p>
-            )}
+            {errors?.name && <p className="mt-1 text-sm text-red-400">{errors!.name[0]}</p>}
           </div>
 
           <div>
@@ -132,9 +131,7 @@ export default function NewFormDefinition() {
               Slug
             </label>
             <input id="slug" name="slug" type="text" required className="input" />
-            {actionData?.errors?.slug && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.slug[0]}</p>
-            )}
+            {errors?.slug && <p className="mt-1 text-sm text-red-400">{errors!.slug[0]}</p>}
           </div>
 
           <div>
@@ -156,9 +153,7 @@ export default function NewFormDefinition() {
               className="input font-mono text-sm"
               defaultValue={exampleSchema}
             />
-            {actionData?.errors?.schema && (
-              <p className="mt-1 text-sm text-red-400">{actionData.errors.schema[0]}</p>
-            )}
+            {errors?.schema && <p className="mt-1 text-sm text-red-400">{errors!.schema[0]}</p>}
             <p className="mt-1 text-xs text-surface-500">
               Field types: text, email, number, textarea, select, checkbox
             </p>
