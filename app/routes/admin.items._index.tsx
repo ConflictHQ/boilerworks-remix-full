@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
 import { db } from "~/db/connection.server";
-import { items, categories } from "~/db/schema";
+import { items as itemsTable, categories } from "~/db/schema";
 import { isNull, eq } from "drizzle-orm";
 import { requirePermission } from "~/services/session.server";
 
@@ -11,18 +11,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const items = await db
     .select({
-      id: items.id,
-      name: items.name,
-      slug: items.slug,
-      price: items.price,
-      isPublished: items.isPublished,
+      id: itemsTable.id,
+      name: itemsTable.name,
+      slug: itemsTable.slug,
+      price: itemsTable.price,
+      isPublished: itemsTable.isPublished,
       categoryName: categories.name,
-      createdAt: items.createdAt,
+      createdAt: itemsTable.createdAt,
     })
-    .from(items)
-    .leftJoin(categories, eq(items.categoryId, categories.id))
-    .where(isNull(items.deletedAt))
-    .orderBy(items.createdAt);
+    .from(itemsTable)
+    .leftJoin(categories, eq(itemsTable.categoryId, categories.id))
+    .where(isNull(itemsTable.deletedAt))
+    .orderBy(itemsTable.createdAt);
 
   return json({ items: items });
 }
