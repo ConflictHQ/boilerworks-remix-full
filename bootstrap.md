@@ -2,10 +2,6 @@
 
 > Remix 2 full-stack application with Drizzle ORM, PostgreSQL, and session-based auth.
 
-See the [Boilerworks Catalogue](../primers/CATALOGUE.md) for philosophy and universal patterns.
-
-See the [stack primer](../primers/remix-full/PRIMER.md) for stack-specific conventions and build order.
-
 ## Architecture
 
 ```
@@ -66,7 +62,7 @@ Remix (Node.js / remix-serve)
 ### Testing
 
 - Vitest with happy-dom environment
-- Test files in `tests/unit/` and `tests/integration/`
+- Test files in `tests/unit/`
 - No empty test bodies
 - Test both allowed and denied permission cases
 
@@ -93,5 +89,6 @@ Default credentials: `admin@boilerworks.dev` / `admin123`
 
 ## Ports
 
-- Remix: 3006
-- PostgreSQL: 5451
+- Remix dev server: 3006
+- Docker Compose app: 3000 (host) -> 3006 (container)
+- PostgreSQL: 5432

@@ -6,7 +6,7 @@ Thank you for your interest in contributing!
 
 1. Fork the repository
 2. Clone your fork
-3. Run `docker compose up -d` (or see README.md for stack-specific setup)
+3. Run `cd docker && docker compose up -d` (or see README.md for stack-specific setup)
 4. Create a feature branch from `main`
 
 ## Development Process
